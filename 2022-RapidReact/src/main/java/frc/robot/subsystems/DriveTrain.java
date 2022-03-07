@@ -34,9 +34,6 @@ public class DriveTrain extends SubsystemBase {
 
   public boolean isInverted = false;
 
-  public final ADXRS450_Gyro gyro = new ADXRS450_Gyro();
-  public final ADXRS450_GyroSim gyroSim = new ADXRS450_GyroSim(gyro);
-
   public final Encoder rightEncoder = new Encoder(
     Constants.A_CHANNEL,
     Constants.B_CHANNEL, 
@@ -65,22 +62,17 @@ public class DriveTrain extends SubsystemBase {
     rightMaster.configFactoryDefault();
     rightSlave.configFactoryDefault();
 
-    SpeedControllerGroup mLeft = new SpeedControllerGroup(leftMaster, leftSlave);
-    SpeedControllerGroup mRight = new SpeedControllerGroup(rightMaster, rightSlave);
+    SpeedControllerGroup LeftGroup = new SpeedControllerGroup(leftMaster, leftSlave);
+    SpeedControllerGroup RightGroup = new SpeedControllerGroup(rightMaster, rightSlave);
 
-    differentialDrive = new DifferentialDrive(mLeft, mRight);
+    differentialDrive = new DifferentialDrive( LeftGroup, RightGroup);
 
     leftEncoder.setDistancePerPulse(Constants.CONVERT_TO_DISTANCE);
     rightEncoder.setDistancePerPulse(Constants.CONVERT_TO_DISTANCE);
   
-  SmartDashboard.putData("Field", field);
+    SmartDashboard.putData("Field", field);
     odometry = new DifferentialDriveOdometry(driveSim.getHeading());
 
-    //leftSlave.follow(leftMaster);
-    //rightSlave.follow(rightMaster);
-
-      SmartDashboard.putData("Field", field);
-      odometry = new DifferentialDriveOdometry(driveSim.getHeading());
   }
   
     public void arcadeDrive(double moveSpeed, double rotateSpeed){
@@ -121,5 +113,9 @@ public class DriveTrain extends SubsystemBase {
     
     driveSim.update(0.02);
     gyroSim.setAngle(-driveSim.getHeading().getDegrees());
+  }
+
+  public ADXRS450_Gyro getGyro() {
+    return gyro;
   }
 }

@@ -4,26 +4,26 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.VictorSP;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class StorageSystem extends SubsystemBase {
-  /** Creates a new Storage. */
-  private final VictorSP storageMotor = new VictorSP(Constants.STORAGE_CONV_ID);;
-  public StorageSystem() {
-  }
+  
+  private final VictorSPX storageMotor = new VictorSPX(Constants.STORAGE_CONV_ID);
+
+  public StorageSystem() {}
 
   @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+  public void periodic() {}
+
   public void activateStorage(double speed){ 
-    storageMotor.set(speed);
-   
+    storageMotor.set(ControlMode.PercentOutput, speed);
   }
+
   public void stopStorage(){
-    storageMotor.set(0.0);
+    storageMotor.set(ControlMode.PercentOutput, 0.0);
   }
   
 }

@@ -33,13 +33,13 @@ private final DriveTrain driveTrain;
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    driveTrain.gyro.reset();
+    driveTrain.getGyro().reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    positionError = ((driveTrain.gyro.getAngle() - angle) / angle) * 100;
+    positionError = ((driveTrain.getGyro().getAngle() - angle) / angle) * 100;
     trueError = positionError * Constants.KP_VALUE;
   
     if(angle < 0){
@@ -61,9 +61,9 @@ private final DriveTrain driveTrain;
   @Override
   public boolean isFinished() {
     if(angle < 0){
-      return driveTrain.gyro.getAngle() < angle;
+      return driveTrain.getGyro().getAngle() < angle;
      }else if(angle > 0){
-      return driveTrain.gyro.getAngle() >= angle;
+      return driveTrain.getGyro().getAngle() >= angle;
      }
      return false;
     }

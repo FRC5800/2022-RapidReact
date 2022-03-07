@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
 
-public class GrabBalls extends CommandBase {
+public class InvertIntake extends CommandBase {
+  
+  private Intake intake;
 
-  private final Intake intake;
-
-  public GrabBalls(Intake intake) {
+  public InvertIntake(Intake intake) {
     this.intake = intake;
     addRequirements(intake);
   }
@@ -22,7 +22,7 @@ public class GrabBalls extends CommandBase {
 
   @Override
   public void execute() {
-    intake.grabBalls(Constants.INTAKE_SPEED);
+    intake.grabBalls(-Constants.INTAKE_SPEED);
   }
 
   @Override
