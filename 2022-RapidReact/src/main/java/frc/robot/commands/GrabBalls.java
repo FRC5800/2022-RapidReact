@@ -4,37 +4,44 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
 
 public class GrabBalls extends CommandBase {
-  /** Creates a new GrabBalls. */
-  private final Intake intake;
 
-  public GrabBalls(Intake param_intake) {
-    // Use addRequirements() here to declare subsystem dependencies.
-  intake = param_intake;
-  addRequirements(intake);
+  private final Intake intake;
+  private XboxController xboxController;
+
+  public GrabBalls(Intake intake, XboxController xboxController) {
+    this.intake = intake;
+	this.xboxController = xboxController;
+    addRequirements(intake);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.grabBalls(Constants.GB_VELOCITY);
+	double rightTrigger = xboxController.getRawAxis(XboxController.Axis.kRightTrigger.value);
+	double leftTrigger = xboxController.getRawAxis(XboxController.Axis.kLeftTrigger.value);
+
+	if (rightTrigger > Constants.Intake.DEADBAND) {
+	  intake.grabBalls(rightTrigger * Constants.Intake.MAX_SPEED);
+	} else if (leftTrigger > Constants.Intake.DEADBAND) {
+	  intake.grabBalls(rightTrigger * Constants.Intake.MAX_SPEED);
+	} else {
+	  intake.stop();
+	}
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stopIntake();
+    intake.stop();
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

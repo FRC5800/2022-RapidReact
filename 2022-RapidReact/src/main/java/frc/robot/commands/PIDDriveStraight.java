@@ -8,7 +8,6 @@ import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-/** An example command that uses an example subsystem. */
 public class PIDDriveStraight extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveTrain driveTrain;
@@ -40,9 +39,9 @@ public class PIDDriveStraight extends CommandBase {
   public void execute() {
     positionError = ((driveTrain.getTrueDistance() - distance) / distance) * 100;
     trueError = positionError * Constants.KP_VALUE;
-    
+
     if(distance > 0){
-    driveTrain.arcadeDrive(trueError, 0);
+      driveTrain.arcadeDrive(trueError, 0);
     }
 
     if(distance < 0){
@@ -61,9 +60,10 @@ public class PIDDriveStraight extends CommandBase {
   public boolean isFinished() {
     if(distance > 0){
       return driveTrain.getTrueDistance() >= distance;
-    }
-    else if(distance < 0){
+    } else if(distance < 0){
       return driveTrain.getTrueDistance() <= distance;
-    }return false;
+    }
+
+	return false;
   }
 }

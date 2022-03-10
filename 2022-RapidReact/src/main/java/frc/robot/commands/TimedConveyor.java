@@ -4,47 +4,42 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.Climber;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.StorageSystem;
 
-public class ClimberCommand extends CommandBase {
+public class TimedConveyor extends CommandBase {
 
-  private Climber climber;
+  private final StorageSystem storageSystem;
+  private final Timer timer = new Timer();
   private double speed;
   private double time;
-  private Timer timer = new Timer();
 
-  public ClimberCommand(Climber climber, double speed, double time) {
-    this.climber = climber;
+  public TimedConveyor(StorageSystem storageSystem, double speed, double time) {
     this.speed = speed;
-    addRequirements(climber);
+	this.time = time;
+    this.storageSystem = storageSystem;
+    addRequirements(storageSystem);
   }
 
   @Override
   public void initialize() {
-    timer.reset();
-    timer.start();
+	timer.reset();
+	timer.start();
   }
 
   @Override
   public void execute() {
-    if(timer.get() <= time/2){
-      climber.extendClimber(speed);
-    } else if((timer.get() > time/2)){
-      climber.retractClimber(speed);
-    }
+    storageSystem.activate(speed);
   }
 
   @Override
   public void end(boolean interrupted) {
-    climber.setClimberSpeed(0);
-    timer.stop();
+    storageSystem.stop();
   }
 
   @Override
   public boolean isFinished() {
-    return timer.get() > time;
+    return timer.get() >= time;
   }
 }
-

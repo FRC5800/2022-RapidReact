@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /** An example command that uses an example subsystem. */
 public class PIDTurnAngle extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  
-private final DriveTrain driveTrain;
+
+  private final DriveTrain driveTrain;
 
   private final double angle;
   private double positionError = 0;
@@ -33,22 +33,22 @@ private final DriveTrain driveTrain;
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    driveTrain.gyro.reset();
+    driveTrain.getGyro().reset();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    positionError = ((driveTrain.gyro.getAngle() - angle) / angle) * 100;
+    positionError = ((driveTrain.getGyro().getAngle() - angle) / angle) * 100;
     trueError = positionError * Constants.KP_VALUE;
-  
+
     if(angle < 0){
         driveTrain.arcadeDrive(0, -trueError);
     }
 
     if(angle > 0){
         driveTrain.arcadeDrive(0, trueError);
-      }
+	}
   }
 
   // Called once the command ends or is interrupted.
@@ -61,10 +61,10 @@ private final DriveTrain driveTrain;
   @Override
   public boolean isFinished() {
     if(angle < 0){
-      return driveTrain.gyro.getAngle() < angle;
-     }else if(angle > 0){
-      return driveTrain.gyro.getAngle() >= angle;
-     }
-     return false;
+      return driveTrain.getGyro().getAngle() < angle;
+    } else if(angle > 0){
+      return driveTrain.getGyro().getAngle() >= angle;
     }
+      return false;
+  }
 }

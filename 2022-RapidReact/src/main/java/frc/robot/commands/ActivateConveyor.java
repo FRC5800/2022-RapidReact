@@ -8,34 +8,29 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.StorageSystem;
 
 public class ActivateConveyor extends CommandBase {
+
   private final StorageSystem storageSystem;
-  private double convSpeed;
-  /** Creates a new activateConveyor. */
+  private double speed;
+
   public ActivateConveyor(StorageSystem storageSystem, double speed) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    convSpeed = speed;
+    this.speed = speed;
     this.storageSystem = storageSystem;
     addRequirements(storageSystem);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    storageSystem.activateStorage(convSpeed);
-
+    storageSystem.activate(speed);
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    storageSystem.stopStorage();
+    storageSystem.stop();
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
