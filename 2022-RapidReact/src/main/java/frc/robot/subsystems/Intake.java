@@ -4,31 +4,27 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.VictorSP;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
-  /** Creates a new Intake. */
 
-  private VictorSP intakeMotor;
+  private VictorSPX motor;
 
-  public Intake() {  
-  
-  intakeMotor = new VictorSP(Constants.INTAKE_MOTOR_ID);
-  
+  public Intake() {
+    motor = new VictorSPX(Constants.Intake.MOTOR_ID);
+    motor.setInverted(true);
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+  public void periodic() {}
 
   public void grabBalls(double speed) {
-  intakeMotor.set(speed);
-}
+    motor.set(ControlMode.PercentOutput, speed);
+  }
 
-  public void stopIntake() {
-  intakeMotor.set(0);
-}
+  public void stop() {
+    motor.set(ControlMode.PercentOutput, 0);
+  }
 }

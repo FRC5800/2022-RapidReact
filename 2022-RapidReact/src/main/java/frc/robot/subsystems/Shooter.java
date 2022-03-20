@@ -9,21 +9,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
-    private final WPI_TalonSRX rightMotor = new WPI_TalonSRX(Constants.SHOOTER_RIGHT_MOTOR_SHOOTER_ID);
-    private final WPI_TalonSRX leftMotor = new WPI_TalonSRX(Constants.SHOOTER_LEFT_MOTOR_SHOOTER_ID);
+    private final WPI_TalonSRX rightMotor = new WPI_TalonSRX(Constants.Shooter.RIGHT_MOTOR_ID);
+    private final WPI_TalonSRX leftMotor = new WPI_TalonSRX(Constants.Shooter.LEFT_MOTOR_ID);
 
     public Shooter() {
         rightMotor.configFactoryDefault();
         leftMotor.configFactoryDefault();
-        leftMotor.setInverted(true);
+        rightMotor.setInverted(true);
     }
 
-    public void turnOnShooter() {
-        rightMotor.set(Constants.SHOOTER_VELOCITY);
-        leftMotor.set(Constants.SHOOTER_VELOCITY);
+    public void activate(double speed) {
+        rightMotor.set(speed);
+        leftMotor.set(speed);
     }
 
-    public void turnOffShooter() {
+    public void stop() {
         rightMotor.set(0);
         leftMotor.set(0);
     }

@@ -23,28 +23,25 @@ import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase {
   private DifferentialDrive differentialDrive;
-  private final WPI_TalonSRX leftMaster = new WPI_TalonSRX(Constants.LEFT_MASTER_ID);
-  private final WPI_TalonSRX leftSlave = new WPI_TalonSRX(Constants.LEFT_SLAVE_ID);
-  private final WPI_TalonSRX rightMaster = new WPI_TalonSRX(Constants.RIGHT_MASTER_ID);
-  private final WPI_TalonSRX rightSlave = new WPI_TalonSRX(Constants.RIGHT_SLAVE_ID);
+  private final WPI_TalonSRX leftMaster = new WPI_TalonSRX(Constants.DriveTrain.LEFT_MASTER_ID);
+  private final WPI_TalonSRX leftSlave = new WPI_TalonSRX(Constants.DriveTrain.LEFT_SLAVE_ID);
+  private final WPI_TalonSRX rightMaster = new WPI_TalonSRX(Constants.DriveTrain.RIGHT_MASTER_ID);
+  private final WPI_TalonSRX rightSlave = new WPI_TalonSRX(Constants.DriveTrain.RIGHT_SLAVE_ID);
 
 
   private final ADXRS450_Gyro gyro = new ADXRS450_Gyro();
   private final ADXRS450_GyroSim gyroSim = new ADXRS450_GyroSim(gyro);
 
-  public boolean isInverted = false;
-
-  public final ADXRS450_Gyro gyro = new ADXRS450_Gyro();
-  public final ADXRS450_GyroSim gyroSim = new ADXRS450_GyroSim(gyro);
+  private boolean isInverted = true;
 
   public final Encoder rightEncoder = new Encoder(
     Constants.A_CHANNEL,
-    Constants.B_CHANNEL, 
+    Constants.B_CHANNEL,
     false);
 
   public final Encoder leftEncoder = new Encoder(
-    Constants.A_CHANNEL,
-    Constants.B_CHANNEL, 
+    Constants.C_CHANNEL,
+    Constants.D_CHANNEL,
     false);
 
   private DifferentialDrivetrainSim driveSim = DifferentialDrivetrainSim.createKitbotSim(
@@ -65,24 +62,19 @@ public class DriveTrain extends SubsystemBase {
     rightMaster.configFactoryDefault();
     rightSlave.configFactoryDefault();
 
-    SpeedControllerGroup mLeft = new SpeedControllerGroup(leftMaster, leftSlave);
-    SpeedControllerGroup mRight = new SpeedControllerGroup(rightMaster, rightSlave);
+    SpeedControllerGroup LeftGroup = new SpeedControllerGroup(leftMaster, leftSlave);
+    SpeedControllerGroup RightGroup = new SpeedControllerGroup(rightMaster, rightSlave);
 
-    differentialDrive = new DifferentialDrive(mLeft, mRight);
+    differentialDrive = new DifferentialDrive( LeftGroup, RightGroup);
 
     leftEncoder.setDistancePerPulse(Constants.CONVERT_TO_DISTANCE);
     rightEncoder.setDistancePerPulse(Constants.CONVERT_TO_DISTANCE);
-  
-  SmartDashboard.putData("Field", field);
+
+    SmartDashboard.putData("Field", field);
     odometry = new DifferentialDriveOdometry(driveSim.getHeading());
 
-    //leftSlave.follow(leftMaster);
-    //rightSlave.follow(rightMaster);
-
-      SmartDashboard.putData("Field", field);
-      odometry = new DifferentialDriveOdometry(driveSim.getHeading());
   }
-  
+
     public void arcadeDrive(double moveSpeed, double rotateSpeed){
       differentialDrive.arcadeDrive(moveSpeed, rotateSpeed);
     }
@@ -95,11 +87,11 @@ public class DriveTrain extends SubsystemBase {
     public double getRightTrueDistance() {
       return rightEncoder.getDistance() * Constants.CONVERT_TO_DISTANCE;
     }
-  
+
     public double getLeftTrueDistance() {
       return leftEncoder.getDistance() * Constants.CONVERT_TO_DISTANCE;
     }
-  
+
     public double getTrueDistance() {
       return (getLeftTrueDistance() + getRightTrueDistance()) / 2;
     }
@@ -118,8 +110,24 @@ public class DriveTrain extends SubsystemBase {
       leftMaster.get() * RobotController.getInputVoltage(),
       -rightMaster.get() * RobotController.getInputVoltage()
     );
-    
+
     driveSim.update(0.02);
     gyroSim.setAngle(-driveSim.getHeading().getDegrees());
+  }
+
+  public ADXRS450_Gyro getGyro() {
+    return gyro;
+  }
+
+  public boolean isInverted() {
+	return isInverted;
+  }
+
+  public void setInverted(boolean isInverted) {
+	this.isInverted = isInverted;
+  }
+
+  public void invert() {
+	isInverted = !isInverted;
   }
 }

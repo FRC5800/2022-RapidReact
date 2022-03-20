@@ -4,27 +4,37 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 
 public class Climber extends SubsystemBase {
-  
-  private final WPI_TalonSRX climberTalonSRX = new WPI_TalonSRX(Constants.CLIMBER_ID);
 
-  public Climber() {}
+
+  private final VictorSP upMaster = new VictorSP(Constants.Climber.UP_MASTER_ID);
+  private final VictorSP downMaster = new VictorSP(Constants.Climber.DOWN_MASTER_ID);
+  private final VictorSP downSlave = new VictorSP(Constants.Climber.DOWN_SLAVE_ID);
+
+  private final SpeedControllerGroup downGroup = new SpeedControllerGroup(downSlave, downMaster);
+
+  public Climber() {
+  }
 
   public void setClimberSpeed(double speed){
-    climberTalonSRX.set(speed);
+    downGroup.set(speed);
+    upMaster.set(speed);
   }
 
   public void extendClimber(double speed){
-    climberTalonSRX.set(speed);
+    upMaster.set(speed);
+    downGroup.set(0);
   }
 
-  public void retractClimber(double speed){
-    climberTalonSRX.set(-speed);
+  public void retractClimber(double speedUp, double speedDown){
+    upMaster.set(-speedUp);
+    downGroup.set(speedDown);
   }
 
   @Override
