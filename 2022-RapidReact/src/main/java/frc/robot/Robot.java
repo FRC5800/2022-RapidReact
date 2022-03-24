@@ -26,32 +26,9 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
+        //CameraServer.startAutomaticCapture(1);
         m_robotContainer = new RobotContainer();
-        CameraServer.getInstance().startAutomaticCapture();
-        
-        // Thread visionThread = new Thread(
-        //     () -> {
-        //         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-        //         CvSink cvSink = CameraServer.getInstance().getVideo();
-        //         CvSource output = CameraServer.getInstance().putVideo("Threshold", 600, 600);
-
-        //         Mat mat = new Mat();
-
-        //         while (!Thread.interrupted()) {
-        //             if (cvSink.grabFrame(mat) == 0) {
-        //                 output.notifyError(cvSink.getError());
-        //                 continue;
-        //             }
-
-        //             Imgproc.rectangle(
-        //                 mat, 
-        //                 new Point(0.0, 0.0),
-        //                 new Point(100.0, 100.0),
-        //                 new Scalar(255, 255, 255)
-        //             );
-        //         }
-        
-
+        CameraServer.startAutomaticCapture();
     }
 
     /**

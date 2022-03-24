@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Controllers;
 import frc.robot.subsystems.Intake;
@@ -31,7 +30,7 @@ public class GrabBalls extends CommandBase {
     double rightTrigger = controllers.xboxController0.getRawAxis(XboxController.Axis.kRightTrigger.value);
     if(rightTrigger > 0.3){
       intake.grabBalls(rightTrigger * 0.7);
-    }else if(controllers.xboxController1.getBumper(Hand.kRight)){
+    }else if(controllers.xboxController1.getRightBumper()){
       intake.grabBalls(-0.7);
     }else{
       intake.grabBalls(0);

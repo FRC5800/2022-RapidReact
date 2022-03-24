@@ -6,7 +6,6 @@ package frc.robot.commands.commandgroups;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.auto.AutoStorage;
 import frc.robot.commands.auto.AutoIntake;
@@ -23,10 +22,9 @@ import frc.robot.subsystems.DriveTrain;
 public class AutoRoutine extends ParallelCommandGroup {
 
   public enum AutoMode {
-	TWO_BALLS,
-	ONE_BALL_TARMAC,
 	ONE_BALL,
-	PICK_TWO_BALLS,
+	ONE_BALL_TARMAC,
+	TWO_BALLS,
   }
 
   public AutoRoutine(StorageSystem storageSystem, Shooter shooter, DriveTrain driveTrain, Intake intake, double time, AutoMode autoMode) {
@@ -39,7 +37,6 @@ public class AutoRoutine extends ParallelCommandGroup {
 	  addCommands(
 	    new SequentialCommandGroup(
 		  new AutoStorage(storageSystem, Constants.Storage.SPEED, 4),
-		  new WaitCommand(7.0),
 		  new DriveStraight(driveTrain, 0.6, 3.5)
 		),
 	    new AutoShoot(shooter, -Constants.Shooter.SPEED, time)
@@ -57,18 +54,7 @@ public class AutoRoutine extends ParallelCommandGroup {
 		),
 	    new AutoShoot(shooter, -Constants.Shooter.SPEED, time)
 	  );
-	} else if (autoMode == AutoMode.PICK_TWO_BALLS) {
-		addCommands(
-		  new SequentialCommandGroup(
-			new AutoStorage(storageSystem, Constants.Storage.SPEED, 4),
-			new ParallelCommandGroup(
-			  new AutoIntake(intake, 4),
-			  new DriveStraight(driveTrain, 0.6, 3.5)
-			)
-		  ),
-		  new AutoShoot(shooter, -Constants.Shooter.SPEED, time)
-		);
-	  }
+	}
   }
 
 }
